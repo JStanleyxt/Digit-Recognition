@@ -11,13 +11,13 @@ model.eval()
 
 app = FastAPI(title="Digit Recognition API")
 
-@app.get("/")
-def health_check():
-    return {"message": "Digit Recognition API is running"}
-
 # Input data schema
 class ImageInput(BaseModel):
     pixels: list  # List of 784 floats (28x28 image flattened)
+
+@app.get("/")
+def root():
+    return {"message": "Digit Recognition API is live"}
 
 @app.post("/predict")
 def predict(input: ImageInput):
@@ -29,5 +29,4 @@ def predict(input: ImageInput):
     with torch.no_grad():
         output = model(x)
         prediction = torch.argmax(output, dim=1).item()
-
     return {"predicted_digit": prediction}
